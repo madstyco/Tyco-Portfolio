@@ -1,0 +1,16 @@
+[model]
+training = true
+[model.config]
+matrixshape = [224, 224]
+batchsize = 64
+input_channels = 3
+hidden = 64
+kernel_size = 4
+maxpool = 2
+num_layers = 1
+num_classes = 5
+
+
+[types]
+training = "bool"
+config = "dict"
