@@ -1,0 +1,8 @@
+loguru
+requests
+fastapi
+uvicorn[standard]
+torch
+pydantic
+tokenizers
+slanggen
