@@ -15,7 +15,7 @@ Since 2019, significant progress has been made in automatically recognizing cada
 The challenge lies in the fact that notaries and other deed providers have complete freedom in how they phrase and structure documents. There is no fixed format or standard vocabulary, every deed is written differently. This makes automated recognition of legal facts a much harder task than identifying names or parcel numbers.
 
 ## Outcome
-Recognizing legal facts is the crucial first step in processing a deed into the **BRK (Basic Registration Cadastre)**. Why?  
+Recognizing legal facts is the crucial first step in processing a deed into the **BRK (Basic Registration Cadastre)**.
 - You must check whether the deed meets registration requirements, and this depends on the legal fact.  
 - The data to be extracted varies per legal fact.  
 - Processing priority differs—for example, a seizure must be processed faster than a mortgage or transfer.  
