@@ -7,7 +7,7 @@ The primary objective was to build a system that could analyze a deed and automa
 - Who is involved and what their role is  
 - Which parcels or apartments are affected  
 
-This is essential because the Cadastre distinguishes more than a hundred different types of such events, known as *legal facts* or *document parts*. Correctly recording these changes is the core of the Cadastre’s work.
+This is essential because the Kadaster distinguishes more than a hundred different types of such events, known as *legal facts* or *document parts*. Correctly recording these changes is the core of the Kadasters work.
 
 ## The Model
 Since 2019, significant progress has been made in automatically recognizing cadastral designations, persons, and other key data from deeds. However, recognizing legal facts remains far more complex.  
