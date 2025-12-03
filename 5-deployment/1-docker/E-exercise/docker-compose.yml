@@ -1,0 +1,48 @@
+services:
+  ingest:
+    build:
+      context: ./backend/ingest
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+
+  preprocess:
+    build:
+      context: ./backend/preprocess
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - ingest
+
+  model:
+    build:
+      context: ./backend/model
+    ports: 
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./img:/app/img
+    depends_on:
+      - preprocess
+
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://localhost:8000/health && exit 0 || exit 1"]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 10s
+    # restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./img:/app/img
+    depends_on:
+      - model
+

@@ -1,0 +1,10 @@
+pandas
+pathlib
+seaborn
+matplotlib
+numpy
+loguru
+scikit-learn
+fastparquet
+fastapi
+uvicorn
