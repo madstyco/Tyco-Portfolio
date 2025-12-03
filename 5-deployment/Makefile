@@ -45,7 +45,7 @@ build: model
 run: build
 	@echo "$(YELLOW)Starting container $(IMAGE_NAME):$(IMAGE_TAG)...$(NC)"
 	# adding the -t flag enables color codiding for loguru
-	docker run -t -p 80:80 $(IMAGE_NAME):$(IMAGE_TAG)
+	docker run -t -p 8080:80 $(IMAGE_NAME):$(IMAGE_TAG)
 
 clean:
 	@echo "$(YELLOW)Cleaning up...$(NC)"

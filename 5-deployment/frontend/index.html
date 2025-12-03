@@ -1,90 +1,135 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Street Language Generator</title>
-    <link rel="stylesheet" href="static/styles.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>Street Language Generator</h1>
-      <div class="controls">
-        <label for="num_words">Number of words:</label>
-        <input
-          type="number"
-          id="num_words"
-          name="num_words"
-          value="10"
-          min="1"
-        />
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Baby Naam Generator ✨</title>
+  <link rel="stylesheet" href="static/styles.css" />
+  <!-- Leuke baby-iconen van Tabler Icons (gratis) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Baby Naam Generator</h1>
+      <p class="subtitle">Laat de magie een prachtige naam voor jouw kindje vinden ✨</p>
+    </header>
 
-        <label for="temperature">Temperature:</label>
-        <input
-          type="range"
-          id="temperature"
-          name="temperature"
-          min="0.1"
-          max="2.0"
-          value="1.0"
-          step="0.1"
-          oninput="updateTempLabel(this.value)"
-        />
-        <span id="temp-value">1.0</span>
-
-        <button id="generate-btn">Generate Words</button>
+    <div class="controls">
+      <div class="control-group">
+        <label>
+          <i class="ti ti-baby-carriage"></i> Aantal namen
+        </label>
+        <input type="number" id="num_words" value="12" min="1" max="30" />
       </div>
-      <div class="words-container" id="words-container"></div>
-      <h2>Starred Words</h2>
-      <div class="starred-container" id="starred-container"></div>
+
+      <div class="control-group">
+        <label>
+          <i class="ti ti-mood-heart"></i> Creativiteit
+        </label>
+        <input type="range" id="temperature" min="0.4" max="1.8" step="0.1" value="1.0"
+               oninput="updateTempLabel(this.value)" />
+        <span id="temp-value" class="temp-label">1.0</span>
+      </div>
+
+      <div class="control-group gender-select">
+        <label><i class="ti ti-gender-bigender"></i> Geslacht</label>
+        <div class="gender-buttons">
+          <button type="button" data-gender="all" class="active">Alle</button>
+          <button type="button" data-gender="boy">Jongen</button>
+          <button type="button" data-gender="girl">Meisje</button>
+        </div>
+      </div>
+
+      <button id="generate-btn" class="generate-btn">
+        <i class="ti ti-sparkles"></i> Genereer magische namen
+      </button>
     </div>
 
-    <script>
-      let starredWords = [];
+    <div class="names-grid" id="words-container"></div>
 
-      function updateTempLabel(value) {
-        document.getElementById("temp-value").textContent = value;
+    <div class="favorites">
+      <h2><i class="ti ti-heart-filled"></i> Favoriete namen</h2>
+      <div class="starred-container" id="starred-container"></div>
+      <p class="no-favs" id="no-favs">Klik op een naam om hem aan je favorieten toe te voegen ♡</p>
+    </div>
+  </div>
+
+  <script>
+    let starredWords = [];
+    let selectedGender = 'all';
+
+    // Gender knoppen
+    document.querySelectorAll('.gender-buttons button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.gender-buttons button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedGender = btn.dataset.gender;
+      });
+    });
+
+    function updateTempLabel(value) {
+      document.getElementById("temp-value").textContent = value;
+    }
+
+    function updateStarredContainer() {
+      const container = document.getElementById("starred-container");
+      const noFavs = document.getElementById("no-favs");
+      container.innerHTML = "";
+      if (starredWords.length === 0) {
+        noFavs.style.display = "block";
+      } else {
+        noFavs.style.display = "none";
       }
-
-      function updateStarredContainer() {
-        const starredContainer = document.getElementById("starred-container");
-        starredContainer.innerHTML = "";
-        starredWords.forEach((word) => {
-          const wordElement = document.createElement("div");
-          wordElement.className = "word-item starred";
-          wordElement.textContent = word;
-          starredContainer.appendChild(wordElement);
+      starredWords.forEach(word => {
+        const el = document.createElement("div");
+        el.className = "name-card favorite";
+        el.textContent = word;
+        el.addEventListener('click', () => {
+          starredWords = starredWords.filter(w => w !== word);
+          updateStarredContainer();
+          document.querySelectorAll('.name-card').forEach(card => {
+            if (card.textContent === word) card.classList.remove('favorite');
+          });
         });
-      }
+        container.appendChild(el);
+      });
+    }
 
-      document
-        .getElementById("generate-btn")
-        .addEventListener("click", function () {
-          const numWords = document.getElementById("num_words").value;
-          const temperature = document.getElementById("temperature").value;
-          fetch(`/generate?num_words=${numWords}&temperature=${temperature}`)
-            .then((response) => response.json())
-            .then((data) => {
-              const wordsContainer = document.getElementById("words-container");
-              wordsContainer.innerHTML = "";
-              data.forEach((word) => {
-                const wordElement = document.createElement("div");
-                wordElement.className = "word-item";
-                wordElement.textContent = word;
-                wordElement.addEventListener("click", function () {
-                  wordElement.classList.toggle("starred");
-                  if (wordElement.classList.contains("starred")) {
-                    starredWords.push(word);
-                  } else {
-                    starredWords = starredWords.filter((w) => w !== word);
-                  }
-                  updateStarredContainer();
-                });
-                wordsContainer.appendChild(wordElement);
-              });
-            })
-            .catch((error) => console.error("Error:", error));
+    document.getElementById("generate-btn").addEventListener("click", () => {
+      const numWords = document.getElementById("num_words").value;
+      const temperature = document.getElementById("temperature").value;
+
+      fetch(`/generate?num_words=${numWords}&temperature=${temperature}&gender=${selectedGender}`)
+        .then(r => r.json())
+        .then(data => {
+          const container = document.getElementById("words-container");
+          container.innerHTML = "";
+          data.forEach(word => {
+            const card = document.createElement("div");
+            card.className = "name-card";
+            card.textContent = word;
+
+            // Kleurtje gebaseerd op geslacht (alleen visueel, optioneel)
+            if (selectedGender === 'boy' || (selectedGender === 'all' && Math.random() > 0.5)) {
+              card.classList.add('boy');
+            } else if (selectedGender === 'girl') {
+              card.classList.add('girl');
+            }
+
+            card.addEventListener("click", () => {
+              card.classList.toggle("favorite");
+              if (card.classList.contains("favorite")) {
+                if (!starredWords.includes(word)) starredWords.push(word);
+              } else {
+                starredWords = starredWords.filter(w => w !== word);
+              }
+              updateStarredContainer();
+            });
+            container.appendChild(card);
+          });
         });
-    </script>
-  </body>
+    });
+  </script>
+</body>
 </html>
