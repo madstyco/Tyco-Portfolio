@@ -1,0 +1,18 @@
+# python generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.DS_Store
+
+.venv
+**/data/raw/
+**/data/processed/
+
+.lycheecache
+
+.notebookcache
+notenbookstest.log
+logs/
